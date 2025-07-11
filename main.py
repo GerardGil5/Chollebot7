@@ -1,30 +1,18 @@
 import os
-import json
 from telegram import Bot
+from telegram.error import TelegramError
 
+# Leer variables de entorno
 TOKEN = os.getenv("BOT_TOKEN")
 CHANNEL_ID = os.getenv("CHANNEL_ID")
 
-bot = Bot(token=TOKEN)
+print(f"📦 BOT_TOKEN: {'CARGADO' if TOKEN else 'VACÍO'}")
+print(f"📦 CHANNEL_ID: {CHANNEL_ID}")
 
-def load_products():
-    try:
-        with open("products.json", "r") as f:
-            return json.load(f)
-    except Exception as e:
-        print(f"Error loading products: {e}")
-        return []
-
-def load_user_prefs():
-    try:
-        with open("user_prefs.json", "r") as f:
-            return json.load(f)
-    except Exception as e:
-        print(f"Error loading user prefs: {e}")
-        return {}
-
-if __name__ == "__main__":
-    print("Bot is running...")
-    products = load_products()
-    prefs = load_user_prefs()
-    bot.send_message(chat_id=CHANNEL_ID, text="Chollebot está en marcha 🚀")
+try:
+    bot = Bot(token=TOKEN)
+    bot.send_message(chat_id=CHANNEL_ID, text="✅ El bot se ha iniciado correctamente.")
+    print("✅ Mensaje enviado con éxito")
+except TelegramError as e:
+    print("❌ Error al enviar el mensaje:")
+    print(e)
